@@ -1,98 +1,74 @@
-import React, { useState } from "react";
-import "./Register.css";
-import user_icon from "../assets/person.png"
-import email_icon from "../assets/email.png"
-import password_icon from "../assets/password.png"
-import close_icon from "../assets/close.png"
+import React, { useState } from 'react';
 
-const Register = () => {
+import "./Login.css";
+import Header from '../Header/Header';
+
+const Login = ({ onClose }) => {
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setlastName] = useState("");
+  const [open,setOpen] = useState(true)
 
+  let login_url = window.location.origin+"/djangoapp/login";
 
-  const gohome = ()=> {
-    window.location.href = window.location.origin;
-  }
-
-  const register = async (e) => {
+  const login = async (e) => {
     e.preventDefault();
 
-    let register_url = window.location.origin+"/djangoapp/register";
-    
-    const res = await fetch(register_url, {
+    const res = await fetch(login_url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
             "userName": userName,
-            "password": password,
-            "firstName":firstName,
-            "lastName":lastName,
-            "email":email
+            "password": password
         }),
     });
-
+    
     const json = await res.json();
-    if (json.status) {
+    if (json.status != null && json.status === "Authenticated") {
         sessionStorage.setItem('username', json.userName);
-        window.location.href = window.location.origin;
+        setOpen(false);        
     }
-    else if (json.error === "Already Registered") {
-      alert("The user with same username is already registered");
-      window.location.href = window.location.origin;
+    else {
+      alert("The user could not be authenticated.")
     }
 };
 
-  return(
-    <div className="register_container" style={{width: "50%"}}>
-      <div className="header" style={{display: "flex",flexDirection: "row", justifyContent: "space-between"}}>
-          <span className="text" style={{flexGrow:"1"}}>SignUp</span> 
-          <div style={{display: "flex",flexDirection: "row", justifySelf: "end", alignSelf: "start" }}>
-          <a href="/" onClick={()=>{gohome()}} style={{justifyContent: "space-between", alignItems:"flex-end"}}>
-            <img style={{width:"1cm"}} src={close_icon} alt="X"/>
-          </a>
-          </div>
-          <hr/>
-        </div>
+  if (!open) {
+    window.location.href = "/";
+  };
+  
 
-        <form onSubmit={register}>
-        <div className="inputs">
-          <div className="input">
-            <img src={user_icon} className="img_icon" alt='Username'/>
-            <input type="text"  name="username" placeholder="Username" className="input_field" onChange={(e) => setUserName(e.target.value)}/>
-          </div>
-          <div>
-            <img src={user_icon} className="img_icon" alt='First Name'/>
-            <input type="text"  name="first_name" placeholder="First Name" className="input_field" onChange={(e) => setFirstName(e.target.value)}/>
-          </div>
-
-          <div>
-            <img src={user_icon} className="img_icon" alt='Last Name'/>
-            <input type="text"  name="last_name" placeholder="Last Name" className="input_field" onChange={(e) => setlastName(e.target.value)}/>
-          </div>
-
-          <div>
-            <img src={email_icon} className="img_icon" alt='Email'/>
-            <input type="email"  name="email" placeholder="email" className="input_field" onChange={(e) => setEmail(e.target.value)}/>
-          </div>
-
-          <div className="input">
-            <img src={password_icon} className="img_icon" alt='password'/>
-            <input name="psw" type="password"  placeholder="Password" className="input_field" onChange={(e) => setPassword(e.target.value)}/>
-          </div>
-
-        </div>
-        <div className="submit_panel">
-          <input className="submit" type="submit" value="Register"/>
-        </div>
-      </form>
+  return (
+    <div>
+      <Header/>
+    <div onClick={onClose}>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        className='modalContainer'
+      >
+          <form className="login_panel" style={{}} onSubmit={login}>
+              <div>
+              <span className="input_field">Username </span>
+              <input type="text"  name="username" placeholder="Username" className="input_field" onChange={(e) => setUserName(e.target.value)}/>
+              </div>
+              <div>
+              <span className="input_field">Password </span>
+              <input name="psw" type="password"  placeholder="Password" className="input_field" onChange={(e) => setPassword(e.target.value)}/>            
+              </div>
+              <div>
+              <input className="action_button" type="submit" value="Login"/>
+              <input className="action_button" type="button" value="Cancel" onClick={()=>setOpen(false)}/>
+              </div>
+              <a className="loginlink" href="/register">Register Now</a>
+          </form>
       </div>
-  )
-}
+    </div>
+    </div>
+  );
+};
 
-export default Register;
+export default Login;
