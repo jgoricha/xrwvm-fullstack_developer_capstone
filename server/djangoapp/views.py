@@ -74,7 +74,7 @@ def registration(request):
             last_name=last_name, password=password, email=email)
         # Login the user and redirect to list page
         login(request, user)
-        data = {"userName": username "status": "Authenticated"}
+        data = {"userName": username, "status": "Authenticated"}
         return JsonResponse(data)
     else:
         data = {"userName": username, "error": "Already Registered"}
