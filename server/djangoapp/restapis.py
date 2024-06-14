@@ -15,7 +15,7 @@ sentiment_analyzer_url = os.getenv(
 
 def get_request(endpoint, **kwargs):
     params = ""
-    if(kwargs ):
+    if (kwargs):
         for key, value in kwargs.items():
             params = params + key + "=" + value + "&"
 
@@ -28,7 +28,7 @@ def get_request(endpoint, **kwargs):
         return response.json()
     except Exception as err:
         # If any error occurs
-        print("Network exception occurred")
+        print(f"Network exception occurred: {err}")
 
 
 def analyze_review_sentiments(text):
@@ -38,7 +38,7 @@ def analyze_review_sentiments(text):
         response = requests.get(request_url)
         return response.json()
     except Exception as err:
-        print(f"Network exception occurred: {e}")
+        print(f"Network exception occurred: {err}")
         return None
 
 
@@ -50,4 +50,4 @@ def post_review(data_dict):
         print(response.json())
         return response.json()
     except Exception as err:
-        print("Network exception occurred")
+        print(f"Network exception occurred: {err}")
