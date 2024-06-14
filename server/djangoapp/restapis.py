@@ -7,10 +7,14 @@ load_dotenv()
 
 backend_url = os.getenv(
     'backend_url',
-    default="https://janvigoricha-3030.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai")
+    default="https://janvigoricha-3030.theiadockernext" + \
+            "-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai"
+)
 sentiment_analyzer_url = os.getenv(
     'sentiment_analyzer_url',
-    default="https://sentianalyzer.1i4zgilvndjf.us-south.codeengine.appdomain.cloud/")
+    default="https://sentianalyzer.1i4zgilvndjf." + \
+            "us-south.codeengine.appdomain.cloud/"
+)
 
 
 def get_request(endpoint, **kwargs):
